@@ -1,0 +1,1135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Happy Birthday!</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #ffeef5 0%, #fff5f8 50%, #ffeef5 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            color: #5a4a4a;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* Background GIFs */
+        .background-gif {
+            position: fixed;
+            z-index: 0;
+            pointer-events: none;
+            opacity: 0.3;
+            max-width: 200px;
+            max-height: 200px;
+            object-fit: contain;
+        }
+
+        .background-gif-1 {
+            top: 10%;
+            left: 5%;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        .background-gif-2 {
+            top: 20%;
+            right: 5%;
+            animation: float 8s ease-in-out infinite;
+            animation-delay: 1s;
+        }
+
+        .background-gif-3 {
+            bottom: 20%;
+            left: 8%;
+            animation: float 7s ease-in-out infinite;
+            animation-delay: 2s;
+        }
+
+        .background-gif-4 {
+            bottom: 15%;
+            right: 8%;
+            animation: float 9s ease-in-out infinite;
+            animation-delay: 0.5s;
+        }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0px) rotate(0deg);
+            }
+            50% {
+                transform: translateY(-20px) rotate(5deg);
+            }
+        }
+
+        /* Ensure content is above background GIFs */
+        .passcode-screen,
+        .birthday-screen {
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Screen 1: Passcode Screen */
+        .passcode-screen {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            max-width: 500px;
+            animation: fadeIn 0.6s ease-in;
+        }
+
+        .passcode-card {
+            background: #fff;
+            border-radius: 24px;
+            padding: 40px;
+            box-shadow: 0 8px 32px rgba(255, 182, 193, 0.2);
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 30px;
+        }
+
+        .profile-photo-container {
+            position: relative;
+        }
+
+        .profile-photo {
+            width: auto;
+            height: 200px;
+            max-width: 100%;
+            border-radius: 16px;
+            object-fit: contain;
+            border: 4px solid #ffb6c1;
+            box-shadow: 0 4px 16px rgba(255, 182, 193, 0.3);
+            background: #ffeef5;
+            padding: 3px;
+        }
+
+        .keypad-container {
+            width: 100%;
+        }
+
+        .keypad-title {
+            text-align: center;
+            font-size: 24px;
+            font-weight: 500;
+            color: #d48a9e;
+            margin-bottom: 20px;
+            letter-spacing: 0.5px;
+        }
+
+        .keypad {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+            max-width: 240px;
+            margin: 0 auto;
+        }
+
+        .keypad-button {
+            aspect-ratio: 1;
+            border: 2px solid #ffb6c1;
+            background: #fff;
+            border-radius: 16px;
+            font-size: 24px;
+            font-weight: 500;
+            color: #d48a9e;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 8px rgba(255, 182, 193, 0.15);
+        }
+
+        .keypad-button:hover {
+            background: #ffeef5;
+            transform: scale(1.05);
+            box-shadow: 0 4px 12px rgba(255, 182, 193, 0.25);
+        }
+
+        .keypad-button:active {
+            transform: scale(0.98);
+        }
+
+        .passcode-display {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            margin-top: 20px;
+        }
+
+        .passcode-dot {
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            border: 2px solid #ffb6c1;
+            background: transparent;
+            transition: all 0.3s ease;
+        }
+
+        .passcode-dot.filled {
+            background: #ffb6c1;
+            border-color: #d48a9e;
+        }
+
+        /* Screen 2: Birthday Page */
+        .birthday-screen {
+            display: none;
+            width: 100%;
+            max-width: 900px;
+            animation: fadeIn 0.6s ease-in;
+        }
+
+        .birthday-screen.active {
+            display: block;
+        }
+
+        .birthday-container {
+            background: #fff;
+            border-radius: 24px;
+            padding: 40px;
+            box-shadow: 0 8px 32px rgba(255, 182, 193, 0.2);
+            width: 100%;
+        }
+
+        .birthday-header {
+            text-align: center;
+            font-family: 'Dancing Script', cursive;
+            font-size: 48px;
+            font-weight: 700;
+            color: #d48a9e;
+            margin-bottom: 30px;
+            letter-spacing: 2px;
+        }
+
+        .hero-section {
+            position: relative;
+            border-radius: 20px;
+            overflow: hidden;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 20px rgba(255, 182, 193, 0.2);
+        }
+
+        .video-container {
+            position: relative;
+            width: 100%;
+            padding-top: 56.25%; /* 16:9 aspect ratio */
+            background: linear-gradient(135deg, #ffeef5 0%, #ffb6c1 100%);
+        }
+
+        .video-element {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 20px;
+        }
+
+        .video-placeholder {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            z-index: 3;
+            pointer-events: none;
+        }
+
+        .video-placeholder.hidden {
+            display: none;
+        }
+
+        .video-placeholder .play-button {
+            pointer-events: auto;
+        }
+
+        .play-button {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.9);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+        }
+
+        .play-button:hover {
+            transform: scale(1.1);
+            background: rgba(255, 255, 255, 1);
+        }
+
+        .play-button::after {
+            content: '';
+            width: 0;
+            height: 0;
+            border-left: 24px solid #d48a9e;
+            border-top: 14px solid transparent;
+            border-bottom: 14px solid transparent;
+            margin-left: 4px;
+        }
+
+        .video-overlay-text {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            color: #fff;
+            z-index: 2;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+
+        .video-overlay-text h2 {
+            font-family: 'Dancing Script', cursive;
+            font-size: 56px;
+            font-weight: 700;
+            margin-bottom: 10px;
+            text-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .video-overlay-text p {
+            font-size: 18px;
+            opacity: 0.95;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .tab-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            margin-bottom: 50px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+
+        .tab-button {
+            padding: 12px 28px;
+            border: 2px solid #ffb6c1;
+            background: #fff;
+            border-radius: 50px;
+            font-size: 16px;
+            font-weight: 500;
+            color: #d48a9e;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 8px rgba(255, 182, 193, 0.15);
+        }
+
+        .tab-button:hover {
+            background: #ffeef5;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(255, 182, 193, 0.25);
+        }
+
+        .tab-button.active {
+            background: #ffb6c1;
+            color: #fff;
+            border-color: #d48a9e;
+        }
+
+        .content-section {
+            display: none;
+            animation: fadeIn 0.4s ease-in;
+            margin-top: 20px;
+        }
+
+        .content-section.active {
+            display: block;
+        }
+
+        .photo-card {
+            background: #ffeef5;
+            border-radius: 16px;
+            padding: 24px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 12px rgba(255, 182, 193, 0.15);
+        }
+
+        .photo-card-content {
+            display: flex;
+            gap: 24px;
+            align-items: flex-start;
+            flex-wrap: wrap;
+        }
+
+        .photo-card-image {
+            flex: 0 0 200px;
+            max-width: 100%;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(255, 182, 193, 0.2);
+        }
+
+        .photo-card-image img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        .profile-image-circle {
+            flex: 0 0 120px;
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(255, 182, 193, 0.2);
+        }
+
+        .profile-image-circle img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .photo-card-text {
+            flex: 1;
+            min-width: 250px;
+        }
+
+        .photo-card-text h3 {
+            font-family: 'Dancing Script', cursive;
+            font-size: 32px;
+            color: #d48a9e;
+            margin-bottom: 12px;
+        }
+
+        .photo-card-text p {
+            font-size: 16px;
+            line-height: 1.6;
+            color: #5a4a4a;
+        }
+
+        /* Photo Gallery - Film Strip Style */
+        .photo-gallery-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .photo-strip-wrapper {
+            position: relative;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .scroll-arrow {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: #ffb6c1;
+            border: none;
+            color: #fff;
+            font-size: 18px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 8px rgba(255, 182, 193, 0.3);
+            cursor: pointer;
+        }
+
+        .scroll-arrow:hover {
+            background: #d48a9e;
+            transform: scale(1.1);
+        }
+
+        .scroll-arrow:active {
+            transform: scale(0.95);
+        }
+
+        .photo-strip {
+            background: #1a1a1a;
+            border-radius: 12px;
+            padding: 20px 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            max-height: 500px;
+            overflow-y: auto;
+            overflow-x: hidden;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+            scroll-behavior: smooth;
+        }
+
+        .photo-strip::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .photo-strip::-webkit-scrollbar-track {
+            background: #2a2a2a;
+            border-radius: 3px;
+        }
+
+        .photo-strip::-webkit-scrollbar-thumb {
+            background: #ffb6c1;
+            border-radius: 3px;
+        }
+
+        .photo-strip-item {
+            width: 300px;
+            height: 200px;
+            border: 2px solid #fff;
+            border-radius: 4px;
+            overflow: hidden;
+            position: relative;
+            background: #000;
+            flex-shrink: 0;
+        }
+
+        .photo-strip-item img {
+            width: 100%;
+            height: 100%;
+            display: block;
+            object-fit: cover;
+        }
+
+        .photo-strip-item.has-play-button::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 0;
+            height: 0;
+            border-left: 20px solid rgba(255, 255, 255, 0.9);
+            border-top: 12px solid transparent;
+            border-bottom: 12px solid transparent;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .photo-strip-item.has-play-button:hover::after {
+            transform: translate(-50%, -50%) scale(1.1);
+        }
+
+        .collect-button {
+            display: block;
+            margin: 0 auto;
+            padding: 12px 32px;
+            background: #5a5a5a;
+            color: #fff;
+            border: none;
+            border-radius: 50px;
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .collect-button:hover {
+            background: #4a4a4a;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        }
+
+        .collect-button:active {
+            transform: translateY(0);
+        }
+
+        /* Giftbox Animation */
+        .giftbox-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 400px;
+            padding: 40px;
+            position: relative;
+            overflow: visible;
+        }
+
+        .giftbox {
+            font-size: 120px;
+            cursor: pointer;
+            position: relative;
+            transition: transform 0.3s ease;
+            animation: bounce 2s ease-in-out infinite;
+            z-index: 2;
+        }
+
+        .giftbox:hover {
+            transform: scale(1.1);
+        }
+
+        .giftbox.opened {
+            animation: none;
+            transform: scale(0);
+            opacity: 0;
+            transition: transform 0.8s ease, opacity 0.8s ease;
+        }
+
+        @keyframes bounce {
+            0%, 100% {
+                transform: translateY(0) scale(1);
+            }
+            50% {
+                transform: translateY(-20px) scale(1.05);
+            }
+        }
+
+        .giftbox-hint {
+            margin-top: 20px;
+            font-size: 18px;
+            color: #d48a9e;
+            font-weight: 500;
+            opacity: 0.8;
+            transition: opacity 0.3s ease;
+        }
+
+        .giftbox-container.video-revealed .giftbox-hint {
+            opacity: 0;
+        }
+
+        .giftbox-video-container {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0);
+            width: 90%;
+            max-width: 800px;
+            max-height: 80vh;
+            opacity: 0;
+            transition: transform 0.8s ease, opacity 0.8s ease;
+            z-index: 10;
+            pointer-events: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .giftbox-video-container.revealed {
+            transform: translate(-50%, -50%) scale(1);
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .giftbox-video {
+            width: 100%;
+            max-height: 80vh;
+            height: auto;
+            border-radius: 16px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            background: #000;
+            display: block;
+            object-fit: contain;
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 50px;
+            padding-top: 30px;
+            border-top: 1px solid rgba(255, 182, 193, 0.3);
+        }
+
+        .footer-text {
+            font-size: 14px;
+            color: #d48a9e;
+            margin-bottom: 8px;
+        }
+
+        .footer-signature {
+            font-family: 'Dancing Script', cursive;
+            font-size: 24px;
+            color: #d48a9e;
+            font-weight: 600;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .passcode-card {
+                padding: 30px 20px;
+            }
+
+            .birthday-container {
+                padding: 30px 20px;
+            }
+
+            .birthday-header {
+                font-size: 36px;
+            }
+
+            .video-overlay-text h2 {
+                font-size: 40px;
+            }
+
+            .photo-card-content {
+                flex-direction: column;
+            }
+
+            .photo-card-image {
+                flex: 1;
+                width: 100%;
+            }
+
+            .giftbox-video-container {
+                width: 95%;
+                max-height: 70vh;
+            }
+
+            .giftbox-video {
+                max-height: 70vh;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Background GIFs -->
+    <img src="gif1.gif" alt="" class="background-gif background-gif-1">
+    <img src="gif2.gif" alt="" class="background-gif background-gif-2">
+    <img src="gif3.gif" alt="" class="background-gif background-gif-3">
+    <img src="gif4.gif" alt="" class="background-gif background-gif-4">
+    
+    <!-- Screen 1: Passcode Screen -->
+    <div class="passcode-screen" id="passcodeScreen">
+        <div class="passcode-card">
+            <div class="profile-photo-container">
+                <img src="photobooth.jpg" alt="Profile" class="profile-photo" id="profilePhoto">
+            </div>
+            <div class="keypad-container">
+                <div class="keypad-title">Enter Passcode</div>
+                <div class="keypad">
+                    <button class="keypad-button" data-number="1">1</button>
+                    <button class="keypad-button" data-number="2">2</button>
+                    <button class="keypad-button" data-number="3">3</button>
+                    <button class="keypad-button" data-number="4">4</button>
+                    <button class="keypad-button" data-number="5">5</button>
+                    <button class="keypad-button" data-number="6">6</button>
+                    <button class="keypad-button" data-number="7">7</button>
+                    <button class="keypad-button" data-number="8">8</button>
+                    <button class="keypad-button" data-number="9">9</button>
+                    <button class="keypad-button" data-number="0" style="grid-column: 2;">0</button>
+                </div>
+                <div class="passcode-display" id="passcodeDisplay">
+                    <div class="passcode-dot"></div>
+                    <div class="passcode-dot"></div>
+                    <div class="passcode-dot"></div>
+                    <div class="passcode-dot"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Background Music -->
+    <audio id="backgroundMusic" loop preload="auto">
+        <source src="22.mp3" type="audio/mpeg">
+        <source src="22.ogg" type="audio/ogg">
+        Your browser does not support the audio element.
+    </audio>
+
+    <!-- Screen 2: Birthday Page -->
+    <div class="birthday-screen" id="birthdayScreen">
+        <div class="birthday-container">
+            <h1 class="birthday-header">happy birthday! pretty girl Anny</h1>
+            
+            <div class="hero-section">
+                <div class="video-container">
+                    <video class="video-element" id="heroVideo" preload="metadata" loop muted>
+                        <source src="IMG_5533.MOV" type="video/mp4">
+                        Your browser does not support the video tag.
+                    </video>
+                    <div class="video-overlay-text">
+                        <h2>hi, 22!</h2>
+                        <p>Wishing you endless joy, love, and happiness on your 22nd birthday ✨</p>
+                    </div>
+                    <div class="video-placeholder" id="videoPlaceholder">
+                        <div class="play-button" id="playButton"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="tab-buttons">
+                <button class="tab-button active" data-tab="letter">Letter</button>
+                <button class="tab-button" data-tab="photogallery">Photo Gallery</button>
+                <button class="tab-button" data-tab="clickme">Click Me!</button>
+            </div>
+
+            <div class="content-section active" id="letterSection">
+                <div class="photo-card">
+                    <div class="photo-card-content">
+                        <div class="photo-card-image profile-image-circle">
+                            <img src="profile.jpg" alt="Profile Photo">
+                        </div>
+                        <div class="photo-card-text">
+                            <h3>a little about u</h3>
+                            <p>
+                                喔我的 queen 👑<br>
+                                妳一出現,世界的光都自動對焦在妳身上。<br>
+                                不是因為妳完美,是因為妳就是妳。<br>
+                                謝謝妳每天不費力地讓我更愛這個世界一點點。
+                            </p>
+                            <p>
+                                喔我的 queen。<br>
+                                有些人漂亮是外表,<br>
+                                但妳是那種一開口、一個眼神,就會讓人靜下來的存在。<br>
+                                能被妳選中,我真的每天都在偷笑。
+                            </p>
+                            <p>
+                                喔喔我的 queen。<br>
+                                我的女朋友根本是神的私藏作品。<br>
+                                溫柔的時候我想躲進去,堅強的時候我想站在妳旁邊。<br>
+                                我的 queen,不管走到哪,我都甘願當妳最忠誠的隨從。
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="content-section" id="photogallerySection">
+                <div class="photo-gallery-container">
+                    <div class="photo-strip-wrapper">
+                        <button class="scroll-arrow" id="scrollUp">↑</button>
+                        <div class="photo-strip" id="photoStrip">
+                            <div class="photo-strip-item">
+                                <img src="photogallery1.JPG" alt="Photo 1">
+                            </div>
+                            <div class="photo-strip-item">
+                                <img src="photogallery2.JPG" alt="Photo 2">
+                            </div>
+                            <div class="photo-strip-item">
+                                <img src="photogallery3.JPG" alt="Photo 3">
+                            </div>
+                            <div class="photo-strip-item">
+                                <img src="photogallery.JPG" alt="Photo 4">
+                            </div>
+                        </div>
+                        <button class="scroll-arrow" id="scrollDown">↓</button>
+                    </div>
+                </div>
+                <button class="collect-button">COLLECT</button>
+            </div>
+
+            <div class="content-section" id="clickmeSection">
+                <div class="giftbox-container">
+                    <div class="giftbox" id="giftbox">
+                        <div class="giftbox-body">🎁</div>
+                        <div class="giftbox-ribbon"></div>
+                    </div>
+                    <p class="giftbox-hint">Click the gift to open!</p>
+                    <div class="giftbox-video-container" id="giftboxVideoContainer">
+                        <video class="giftbox-video" id="giftboxVideo" controls playsinline>
+                            <source src="tiktok.mp4" type="video/mp4">
+                            <source src="tiktok.MOV" type="video/quicktime">
+                            Your browser does not support the video tag.
+                        </video>
+                    </div>
+                </div>
+            </div>
+
+            <div class="footer">
+                <div class="footer-text">(made with love)</div>
+                <div class="footer-signature">harryhou</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Passcode logic
+        const CORRECT_PASSCODE = '0122';
+        let enteredPasscode = '';
+        const passcodeDisplay = document.getElementById('passcodeDisplay');
+        const passcodeScreen = document.getElementById('passcodeScreen');
+        const birthdayScreen = document.getElementById('birthdayScreen');
+        const keypadButtons = document.querySelectorAll('.keypad-button');
+        const backgroundMusic = document.getElementById('backgroundMusic');
+
+        keypadButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                const number = button.getAttribute('data-number');
+                if (enteredPasscode.length < 4) {
+                    enteredPasscode += number;
+                    updatePasscodeDisplay();
+                    
+                    if (enteredPasscode.length === 4) {
+                        if (enteredPasscode === CORRECT_PASSCODE) {
+                            setTimeout(() => {
+                                transitionToBirthday();
+                            }, 300);
+                        } else {
+                            setTimeout(() => {
+                                resetPasscode();
+                            }, 800);
+                        }
+                    }
+                }
+            });
+        });
+
+        function updatePasscodeDisplay() {
+            const dots = passcodeDisplay.querySelectorAll('.passcode-dot');
+            dots.forEach((dot, index) => {
+                if (index < enteredPasscode.length) {
+                    dot.classList.add('filled');
+                } else {
+                    dot.classList.remove('filled');
+                }
+            });
+        }
+
+        function resetPasscode() {
+            enteredPasscode = '';
+            updatePasscodeDisplay();
+        }
+
+        function transitionToBirthday() {
+            passcodeScreen.style.animation = 'fadeIn 0.5s ease-out reverse';
+            setTimeout(() => {
+                passcodeScreen.style.display = 'none';
+                birthdayScreen.classList.add('active');
+                birthdayScreen.style.animation = 'fadeIn 0.6s ease-in';
+                
+                // Auto-play video when birthday screen appears
+                const heroVideo = document.getElementById('heroVideo');
+                const videoPlaceholder = document.getElementById('videoPlaceholder');
+                const videoOverlayText = document.querySelector('.video-overlay-text');
+                
+                if (heroVideo) {
+                    setTimeout(() => {
+                        heroVideo.play().catch(error => {
+                            console.log('Autoplay prevented:', error);
+                        });
+                    }, 100);
+                }
+                
+                if (videoPlaceholder) {
+                    videoPlaceholder.classList.add('hidden');
+                }
+                
+                if (videoOverlayText) {
+                    videoOverlayText.style.opacity = '0.7';
+                }
+                
+                // Auto-play background music when birthday screen appears
+                if (backgroundMusic) {
+                    backgroundMusic.volume = 0.5;
+                    setTimeout(() => {
+                        backgroundMusic.play().catch(error => {
+                            console.log('Music autoplay prevented:', error);
+                        });
+                    }, 200);
+                }
+            }, 500);
+        }
+
+        // Tab switching logic
+        const tabButtons = document.querySelectorAll('.tab-button');
+        const contentSections = document.querySelectorAll('.content-section');
+
+        tabButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                const targetTab = button.getAttribute('data-tab');
+                
+                tabButtons.forEach(btn => btn.classList.remove('active'));
+                contentSections.forEach(section => section.classList.remove('active'));
+                
+                button.classList.add('active');
+                document.getElementById(targetTab + 'Section').classList.add('active');
+            });
+        });
+
+        // Video play button interaction
+        const playButton = document.getElementById('playButton');
+        const heroVideo = document.getElementById('heroVideo');
+        const videoPlaceholder = document.getElementById('videoPlaceholder');
+        const videoOverlayText = document.querySelector('.video-overlay-text');
+
+        if (playButton && heroVideo && videoPlaceholder) {
+            playButton.addEventListener('click', (e) => {
+                e.stopPropagation();
+                if (heroVideo.paused) {
+                    heroVideo.play();
+                    videoPlaceholder.classList.add('hidden');
+                    videoOverlayText.style.opacity = '0.7';
+                } else {
+                    heroVideo.pause();
+                    videoPlaceholder.classList.remove('hidden');
+                    videoOverlayText.style.opacity = '1';
+                }
+            });
+
+            heroVideo.addEventListener('play', () => {
+                videoPlaceholder.classList.add('hidden');
+                videoOverlayText.style.opacity = '0.7';
+            });
+
+            heroVideo.addEventListener('pause', () => {
+                videoPlaceholder.classList.remove('hidden');
+                videoOverlayText.style.opacity = '1';
+            });
+
+            heroVideo.addEventListener('click', () => {
+                if (heroVideo.paused) {
+                    heroVideo.play();
+                } else {
+                    heroVideo.pause();
+                }
+            });
+        }
+
+        // Photo strip scrolling
+        const photoStrip = document.getElementById('photoStrip');
+        const scrollUp = document.getElementById('scrollUp');
+        const scrollDown = document.getElementById('scrollDown');
+
+        if (scrollUp && scrollDown && photoStrip) {
+            scrollUp.addEventListener('click', () => {
+                photoStrip.scrollBy({
+                    top: -220,
+                    behavior: 'smooth'
+                });
+            });
+
+            scrollDown.addEventListener('click', () => {
+                photoStrip.scrollBy({
+                    top: 220,
+                    behavior: 'smooth'
+                });
+            });
+        }
+
+        // Collect button interaction
+        const collectButton = document.querySelector('.collect-button');
+        if (collectButton) {
+            collectButton.addEventListener('click', () => {
+                collectButton.style.transform = 'scale(0.95)';
+                setTimeout(() => {
+                    collectButton.style.transform = 'scale(1)';
+                }, 150);
+
+                const photos = [
+                    'photogallery1.JPG',
+                    'photogallery2.JPG',
+                    'photogallery3.JPG',
+                    'photogallery.JPG'
+                ];
+
+                photos.forEach((photo, index) => {
+                    setTimeout(() => {
+                        const link = document.createElement('a');
+                        link.href = photo;
+                        link.download = photo;
+                        link.style.display = 'none';
+                        document.body.appendChild(link);
+                        link.click();
+                        document.body.removeChild(link);
+                    }, index * 200);
+                });
+            });
+        }
+
+        // Giftbox animation and video reveal with audio control
+        const giftbox = document.getElementById('giftbox');
+        const giftboxContainer = document.querySelector('.giftbox-container');
+        const giftboxVideoContainer = document.getElementById('giftboxVideoContainer');
+        const giftboxVideo = document.getElementById('giftboxVideo');
+        const giftboxHint = document.querySelector('.giftbox-hint');
+
+        if (giftbox && giftboxContainer && giftboxVideoContainer && giftboxVideo) {
+            let isOpened = false;
+
+            giftbox.addEventListener('click', () => {
+                if (isOpened) return;
+                
+                isOpened = true;
+                
+                // Add opened class to giftbox
+                giftbox.classList.add('opened');
+                
+                // Hide hint text
+                if (giftboxHint) {
+                    giftboxHint.style.opacity = '0';
+                }
+                
+                // After giftbox shrinks, reveal video
+                setTimeout(() => {
+                    giftboxContainer.classList.add('video-revealed');
+                    giftboxVideoContainer.classList.add('revealed');
+                    
+                    // Auto-play video when revealed
+                    setTimeout(() => {
+                        giftboxVideo.load();
+                        giftboxVideo.play().then(() => {
+                            // Mute background music when giftbox video plays
+                            if (backgroundMusic) {
+                                backgroundMusic.volume = 0;
+                            }
+                        }).catch(error => {
+                            console.log('Video autoplay prevented:', error);
+                        });
+                    }, 300);
+                }, 400);
+            });
+
+            // Control background music based on giftbox video state
+            giftboxVideo.addEventListener('play', () => {
+                if (backgroundMusic) {
+                    backgroundMusic.volume = 0; // Mute background music
+                }
+            });
+
+            giftboxVideo.addEventListener('pause', () => {
+                if (backgroundMusic) {
+                    backgroundMusic.volume = 0.5; // Resume background music
+                }
+            });
+
+            giftboxVideo.addEventListener('ended', () => {
+                if (backgroundMusic) {
+                    backgroundMusic.volume = 0.5; // Resume background music
+                }
+            });
+        }
+    </script>
+</body>
+</html>
