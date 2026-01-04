@@ -11,6 +11,7 @@
         href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;600;700&family=Inter:wght@300;400;500;600&display=swap"
         rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     <style>
         * {
             margin: 0;
@@ -759,6 +760,75 @@
             }
         }
 
+        @media (max-width: 480px) {
+            body {
+                padding: 10px;
+            }
+
+            .birthday-header {
+                font-size: 32px;
+                margin-bottom: 20px;
+            }
+
+            .video-overlay-text h2 {
+                font-size: 32px;
+            }
+
+            .video-overlay-text p {
+                font-size: 14px;
+            }
+
+            .tab-buttons {
+                gap: 10px;
+                margin-bottom: 30px;
+            }
+
+            .tab-button {
+                padding: 8px 16px;
+                font-size: 14px;
+                width: calc(50% - 10px);
+                /* 2 buttons per row */
+                justify-content: center;
+            }
+
+            .photo-card {
+                padding: 16px;
+            }
+
+            .photo-card-content {
+                gap: 16px;
+            }
+
+            .countdown-title {
+                font-size: 28px;
+            }
+
+            .countdown-timer {
+                gap: 10px;
+            }
+
+            .time-box {
+                min-width: 70px;
+                padding: 10px;
+            }
+
+            .time-value {
+                font-size: 28px;
+            }
+
+            .time-label {
+                font-size: 10px;
+            }
+
+            /* Adjust close button for mobile so it is not cut off */
+            .video-close-btn {
+                top: -15px;
+                right: -10px;
+                width: 36px;
+                height: 36px;
+            }
+        }
+
         /* Music Control Button */
         .music-control {
             position: fixed;
@@ -833,6 +903,75 @@
         .video-close-btn i {
             color: #d48a9e;
             font-size: 20px;
+        }
+
+        /* Lightbox Overlay */
+        .lightbox {
+            display: none;
+            position: fixed;
+            z-index: 2000;
+            padding-top: 50px;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.9);
+            animation: fadeIn 0.3s ease;
+        }
+
+        .lightbox-content {
+            margin: auto;
+            display: block;
+            max-width: 90%;
+            max-height: 90vh;
+            border-radius: 8px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+            animation: zoomIn 0.3s ease;
+        }
+
+        .lightbox-close {
+            position: absolute;
+            top: 20px;
+            right: 35px;
+            color: #f1f1f1;
+            font-size: 40px;
+            font-weight: bold;
+            transition: 0.3s;
+            cursor: pointer;
+            z-index: 2001;
+        }
+
+        .lightbox-close:hover,
+        .lightbox-close:focus {
+            color: #bbb;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        @keyframes zoomIn {
+            from {
+                transform: scale(0)
+            }
+
+            to {
+                transform: scale(1)
+            }
+        }
+
+        /* Typewriter Effect CSS */
+        .typewriter-text {
+            border-right: 2px solid #d48a9e;
+            white-space: normal;
+            display: inline;
+            line-height: 1.8;
+            font-size: 18px;
+            color: #5a4a4a;
+        }
+
+
+        .typewriter-cursor-hidden {
+            border-right: none;
         }
     </style>
 </head>
@@ -929,24 +1068,25 @@
                         </div>
                         <div class="photo-card-text">
                             <h3>a little about u</h3>
-                            <p>
+                            <div id="typewriterContainer">
+                                <p class="typewriter-text"></p>
+                            </div>
+                            <div id="hiddenLetterText" style="display: none;">
                                 喔我的 queen 👑<br>
                                 妳一出現,世界的光都自動對焦在妳身上。<br>
                                 不是因為妳完美,是因為妳就是妳。<br>
-                                謝謝妳每天不費力地讓我更愛這個世界一點點。
-                            </p>
-                            <p>
+                                謝謝妳每天不費力地讓我更愛這個世界一點點。<br>
+                                <br>
                                 喔我的 queen。<br>
                                 有些人漂亮是外表,<br>
                                 但妳是那種一開口、一個眼神,就會讓人靜下來的存在。<br>
-                                能被妳選中,我真的每天都在偷笑。
-                            </p>
-                            <p>
+                                能被妳選中,我真的每天都在偷笑。<br>
+                                <br>
                                 喔喔我的 queen。<br>
                                 我的女朋友根本是神的私藏作品。<br>
                                 溫柔的時候我想躲進去,堅強的時候我想站在妳旁邊。<br>
                                 我的 queen,不管走到哪,我都甘願當妳最忠誠的隨從。
-                            </p>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -1038,6 +1178,12 @@
         </div>
     </div>
 
+    <!-- Lightbox Modal -->
+    <div id="lightboxModal" class="lightbox">
+        <span class="lightbox-close">&times;</span>
+        <img class="lightbox-content" id="lightboxImage">
+    </div>
+
     <script>
         // Passcode logic
         const CORRECT_PASSCODE = '0122';
@@ -1113,6 +1259,12 @@
                 if (videoOverlayText) {
                     videoOverlayText.style.opacity = '0.7';
                 }
+
+                // Trigger Confetti
+                triggerConfetti();
+
+                // Start Typewriter
+                startTypewriter();
 
                 // Auto-play background music when birthday screen appears
                 if (backgroundMusic) {
@@ -1333,6 +1485,116 @@
         // Update every second
         setInterval(updateCountdown, 1000);
         updateCountdown(); // Initial call
+
+
+        // --- New Features Logic ---
+
+        // 1. Confetti Function
+        function triggerConfetti() {
+            var duration = 3 * 1000;
+            var animationEnd = Date.now() + duration;
+            var defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 0 };
+
+            function randomInOut(min, max) {
+                return Math.random() * (max - min) + min;
+            }
+
+            var interval = setInterval(function () {
+                var timeLeft = animationEnd - Date.now();
+
+                if (timeLeft <= 0) {
+                    return clearInterval(interval);
+                }
+
+                var particleCount = 50 * (timeLeft / duration);
+
+                // Since particles fall down, start a bit higher than random
+                confetti(Object.assign({}, defaults, { particleCount, origin: { x: randomInOut(0.1, 0.3), y: Math.random() - 0.2 } }));
+                confetti(Object.assign({}, defaults, { particleCount, origin: { x: randomInOut(0.7, 0.9), y: Math.random() - 0.2 } }));
+            }, 250);
+        }
+
+        // 2. Lightbox Logic
+        const lightboxModal = document.getElementById('lightboxModal');
+        const lightboxImage = document.getElementById('lightboxImage');
+        const lightboxClose = document.querySelector('.lightbox-close');
+        const photoGridItems = document.querySelectorAll('.photo-grid-item img');
+
+        if (lightboxModal && lightboxImage) {
+            photoGridItems.forEach(img => {
+                img.addEventListener('click', (e) => {
+                    lightboxModal.style.display = "block";
+                    lightboxImage.src = e.target.src;
+                });
+            });
+
+            if (lightboxClose) {
+                lightboxClose.addEventListener('click', () => {
+                    lightboxModal.style.display = "none";
+                });
+            }
+
+            lightboxModal.addEventListener('click', (e) => {
+                if (e.target === lightboxModal) {
+                    lightboxModal.style.display = "none";
+                }
+            });
+        }
+
+        // 3. Typewriter Logic
+        function startTypewriter() {
+            const container = document.querySelector('.typewriter-text');
+            const hiddenText = document.getElementById('hiddenLetterText');
+
+            if (!container || !hiddenText) return;
+
+            // Get text content while preserving line breaks
+            // We replace <br> with newlines for the text logic, then re-render
+            let text = hiddenText.innerHTML.replace(/<br\s*\/?>/gi, '\n');
+            // Clean up extra whitespace from HTML formatting if necessary, but keep structure
+            // Simplified approach: usage of simple text content if possible, but we have HTML line breaks.
+            // Better approach: manual parsing or just using the string content directly.
+
+            // Let's use the raw HTML content string but strip the outer whitespace
+            // AND remove source code formatting (newlines and indentation)
+            text = hiddenText.innerHTML.trim().replace(/\s*[\r\n]+\s*/g, '');
+
+            container.innerHTML = ''; // Clear initial
+            let i = 0;
+            let speed = 50; // typing speed in ms
+
+            // Handle HTML tags correctly (don't type them char by char)
+            // Valid simple HTML typewriter
+
+            let html = text;
+            let currentText = "";
+            let tagOpen = false;
+
+            function type() {
+                if (i < html.length) {
+                    let char = html.charAt(i);
+
+                    if (char === '<') tagOpen = true;
+                    if (char === '>') tagOpen = false;
+
+                    currentText += char;
+                    container.innerHTML = currentText;
+
+                    i++;
+
+                    if (tagOpen) {
+                        type(); // Skip delay for tags
+                    } else {
+                        setTimeout(type, speed);
+                    }
+                } else {
+                    // Remove cursor after finished
+                    container.classList.add('typewriter-cursor-hidden');
+                }
+            }
+
+            setTimeout(type, 1000); // Start after small delay
+        }
 
     </script>
 </body>
