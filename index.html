@@ -1,12 +1,16 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Happy Birthday!</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;600;700&family=Inter:wght@300;400;500;600&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         * {
             margin: 0;
@@ -66,9 +70,12 @@
         }
 
         @keyframes float {
-            0%, 100% {
+
+            0%,
+            100% {
                 transform: translateY(0px) rotate(0deg);
             }
+
             50% {
                 transform: translateY(-20px) rotate(5deg);
             }
@@ -226,7 +233,8 @@
         .video-container {
             position: relative;
             width: 100%;
-            padding-top: 56.25%; /* 16:9 aspect ratio */
+            padding-top: 56.25%;
+            /* 16:9 aspect ratio */
             background: linear-gradient(135deg, #ffeef5 0%, #ffb6c1 100%);
         }
 
@@ -318,10 +326,11 @@
             text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
         }
 
+        /* Tabs Design */
         .tab-buttons {
             display: flex;
             justify-content: center;
-            gap: 12px;
+            gap: 15px;
             margin-bottom: 50px;
             margin-top: 20px;
             flex-wrap: wrap;
@@ -329,27 +338,61 @@
 
         .tab-button {
             padding: 12px 28px;
-            border: 2px solid #ffb6c1;
+            border: 2px solid transparent;
             background: #fff;
             border-radius: 50px;
             font-size: 16px;
-            font-weight: 500;
+            font-weight: 600;
             color: #d48a9e;
             cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 2px 8px rgba(255, 182, 193, 0.15);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 4px 15px rgba(255, 182, 193, 0.2);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .tab-button:before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #ffb6c1 0%, #ffc4d0 100%);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            z-index: 0;
+        }
+
+        .tab-button span {
+            position: relative;
+            z-index: 1;
+        }
+
+        .tab-button i {
+            position: relative;
+            z-index: 1;
+            font-size: 18px;
         }
 
         .tab-button:hover {
-            background: #ffeef5;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(255, 182, 193, 0.25);
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: 0 8px 20px rgba(255, 182, 193, 0.4);
+            color: #d48a9e;
         }
 
         .tab-button.active {
-            background: #ffb6c1;
             color: #fff;
-            border-color: #d48a9e;
+            border-color: transparent;
+            box-shadow: 0 8px 25px rgba(255, 182, 193, 0.6);
+            transform: translateY(-2px);
+        }
+
+        .tab-button.active:before {
+            opacity: 1;
         }
 
         .content-section {
@@ -424,137 +467,59 @@
             color: #5a4a4a;
         }
 
-        /* Photo Gallery - Film Strip Style */
+        /* Photo Gallery - 3x3 Grid */
         .photo-gallery-container {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 20px;
-            margin-bottom: 30px;
+            width: 100%;
+            padding: 20px 0;
         }
 
-        .photo-strip-wrapper {
+        .photo-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            width: 100%;
+        }
+
+        .photo-grid-item {
             position: relative;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .scroll-arrow {
-            width: 32px;
-            height: 32px;
-            border-radius: 50%;
-            background: #ffb6c1;
-            border: none;
-            color: #fff;
-            font-size: 18px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.3s ease;
-            box-shadow: 0 2px 8px rgba(255, 182, 193, 0.3);
+            width: 100%;
+            padding-bottom: 100%;
+            /* 1:1 Aspect Ratio */
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
             cursor: pointer;
         }
 
-        .scroll-arrow:hover {
-            background: #d48a9e;
+        .photo-grid-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 24px rgba(212, 138, 158, 0.3);
+            z-index: 2;
+        }
+
+        .photo-grid-item img {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+
+        .photo-grid-item:hover img {
             transform: scale(1.1);
         }
 
-        .scroll-arrow:active {
-            transform: scale(0.95);
+        /* Responsive Grid */
+        @media (max-width: 600px) {
+            .photo-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 10px;
+            }
         }
 
-        .photo-strip {
-            background: #1a1a1a;
-            border-radius: 12px;
-            padding: 20px 16px;
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-            max-height: 500px;
-            overflow-y: auto;
-            overflow-x: hidden;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
-            scroll-behavior: smooth;
-        }
-
-        .photo-strip::-webkit-scrollbar {
-            width: 6px;
-        }
-
-        .photo-strip::-webkit-scrollbar-track {
-            background: #2a2a2a;
-            border-radius: 3px;
-        }
-
-        .photo-strip::-webkit-scrollbar-thumb {
-            background: #ffb6c1;
-            border-radius: 3px;
-        }
-
-        .photo-strip-item {
-            width: 300px;
-            height: 200px;
-            border: 2px solid #fff;
-            border-radius: 4px;
-            overflow: hidden;
-            position: relative;
-            background: #000;
-            flex-shrink: 0;
-        }
-
-        .photo-strip-item img {
-            width: 100%;
-            height: 100%;
-            display: block;
-            object-fit: cover;
-        }
-
-        .photo-strip-item.has-play-button::after {
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 0;
-            height: 0;
-            border-left: 20px solid rgba(255, 255, 255, 0.9);
-            border-top: 12px solid transparent;
-            border-bottom: 12px solid transparent;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .photo-strip-item.has-play-button:hover::after {
-            transform: translate(-50%, -50%) scale(1.1);
-        }
-
-        .collect-button {
-            display: block;
-            margin: 0 auto;
-            padding: 12px 32px;
-            background: #5a5a5a;
-            color: #fff;
-            border: none;
-            border-radius: 50px;
-            font-size: 16px;
-            font-weight: 500;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
-        }
-
-        .collect-button:hover {
-            background: #4a4a4a;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-        }
-
-        .collect-button:active {
-            transform: translateY(0);
-        }
 
         /* Giftbox Animation */
         .giftbox-container {
@@ -589,9 +554,12 @@
         }
 
         @keyframes bounce {
-            0%, 100% {
+
+            0%,
+            100% {
                 transform: translateY(0) scale(1);
             }
+
             50% {
                 transform: translateY(-20px) scale(1.05);
             }
@@ -669,6 +637,7 @@
                 opacity: 0;
                 transform: translateY(10px);
             }
+
             to {
                 opacity: 1;
                 transform: translateY(0);
@@ -680,10 +649,77 @@
                 opacity: 0;
                 transform: translateX(-20px);
             }
+
             to {
                 opacity: 1;
                 transform: translateX(0);
             }
+        }
+
+        /* Moment Section - Countdown */
+        .countdown-container {
+            text-align: center;
+            padding: 30px;
+            background: #fff;
+            border-radius: 20px;
+            box-shadow: 0 4px 16px rgba(255, 182, 193, 0.2);
+            margin-top: 20px;
+            animation: fadeIn 0.8s ease;
+        }
+
+        .countdown-title {
+            font-family: 'Dancing Script', cursive;
+            font-size: 42px;
+            color: #d48a9e;
+            margin-bottom: 30px;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.05);
+        }
+
+        .countdown-timer {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+        }
+
+        .time-box {
+            background: linear-gradient(135deg, #ffeef5 0%, #fff 100%);
+            padding: 20px;
+            border-radius: 16px;
+            min-width: 100px;
+            box-shadow: 0 4px 12px rgba(255, 182, 193, 0.2);
+            border: 1px solid #ffeef5;
+            transition: transform 0.3s ease;
+        }
+
+        .time-box:hover {
+            transform: translateY(-5px);
+        }
+
+        .time-value {
+            font-size: 48px;
+            font-weight: 700;
+            color: #d48a9e;
+            font-family: 'Inter', sans-serif;
+            line-height: 1;
+            margin-bottom: 5px;
+        }
+
+        .time-label {
+            font-size: 14px;
+            color: #8a7a7a;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .moment-message {
+            font-size: 20px;
+            color: #d48a9e;
+            margin-top: 20px;
+            font-family: 'Dancing Script', cursive;
+            display: none;
         }
 
         /* Responsive Design */
@@ -722,15 +758,92 @@
                 max-height: 70vh;
             }
         }
+
+        /* Music Control Button */
+        .music-control {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 50px;
+            height: 50px;
+            background: #fff;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 12px rgba(255, 182, 193, 0.4);
+            cursor: pointer;
+            z-index: 1000;
+            border: 2px solid #ffb6c1;
+            transition: all 0.3s ease;
+        }
+
+        .music-control:hover {
+            transform: scale(1.1);
+            background: #ffeef5;
+        }
+
+        .music-control i {
+            color: #d48a9e;
+            font-size: 20px;
+        }
+
+        .music-control.playing {
+            animation: pulse-border 2s infinite;
+        }
+
+        @keyframes pulse-border {
+            0% {
+                box-shadow: 0 0 0 0 rgba(255, 182, 193, 0.7);
+            }
+
+            70% {
+                box-shadow: 0 0 0 10px rgba(255, 182, 193, 0);
+            }
+
+            100% {
+                box-shadow: 0 0 0 0 rgba(255, 182, 193, 0);
+            }
+        }
+
+        /* Video Close Button */
+        .video-close-btn {
+            position: absolute;
+            top: -20px;
+            right: -20px;
+            width: 40px;
+            height: 40px;
+            background: #fff;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+            z-index: 20;
+            border: 2px solid #ffb6c1;
+            transition: all 0.3s ease;
+        }
+
+        .video-close-btn:hover {
+            transform: scale(1.1);
+            background: #ffeef5;
+        }
+
+        .video-close-btn i {
+            color: #d48a9e;
+            font-size: 20px;
+        }
     </style>
 </head>
+
 <body>
     <!-- Background GIFs -->
     <img src="gif1.gif" alt="" class="background-gif background-gif-1">
     <img src="gif2.gif" alt="" class="background-gif background-gif-2">
     <img src="gif3.gif" alt="" class="background-gif background-gif-3">
     <img src="gif4.gif" alt="" class="background-gif background-gif-4">
-    
+
     <!-- Screen 1: Passcode Screen -->
     <div class="passcode-screen" id="passcodeScreen">
         <div class="passcode-card">
@@ -768,11 +881,15 @@
         Your browser does not support the audio element.
     </audio>
 
+    <div class="music-control" id="musicControl">
+        <i class="fa-solid fa-music"></i>
+    </div>
+
     <!-- Screen 2: Birthday Page -->
     <div class="birthday-screen" id="birthdayScreen">
         <div class="birthday-container">
             <h1 class="birthday-header">happy birthday! pretty girl Anny</h1>
-            
+
             <div class="hero-section">
                 <div class="video-container">
                     <video class="video-element" id="heroVideo" preload="metadata" loop muted>
@@ -790,9 +907,18 @@
             </div>
 
             <div class="tab-buttons">
-                <button class="tab-button active" data-tab="letter">Letter</button>
-                <button class="tab-button" data-tab="photogallery">Photo Gallery</button>
-                <button class="tab-button" data-tab="clickme">Click Me!</button>
+                <button class="tab-button active" data-tab="letter">
+                    <i class="fa-solid fa-envelope-open-text"></i> <span>Letter</span>
+                </button>
+                <button class="tab-button" data-tab="photogallery">
+                    <i class="fa-solid fa-camera-retro"></i> <span>Photo Gallery</span>
+                </button>
+                <button class="tab-button" data-tab="moment">
+                    <i class="fa-solid fa-hourglass-half"></i> <span>Moment</span>
+                </button>
+                <button class="tab-button" data-tab="clickme">
+                    <i class="fa-solid fa-gift"></i> <span>Click Me!</span>
+                </button>
             </div>
 
             <div class="content-section active" id="letterSection">
@@ -828,26 +954,36 @@
 
             <div class="content-section" id="photogallerySection">
                 <div class="photo-gallery-container">
-                    <div class="photo-strip-wrapper">
-                        <button class="scroll-arrow" id="scrollUp">↑</button>
-                        <div class="photo-strip" id="photoStrip">
-                            <div class="photo-strip-item">
-                                <img src="photogallery1.JPG" alt="Photo 1">
-                            </div>
-                            <div class="photo-strip-item">
-                                <img src="photogallery2.JPG" alt="Photo 2">
-                            </div>
-                            <div class="photo-strip-item">
-                                <img src="photogallery3.JPG" alt="Photo 3">
-                            </div>
-                            <div class="photo-strip-item">
-                                <img src="photogallery.JPG" alt="Photo 4">
-                            </div>
+                    <div class="photo-grid">
+                        <div class="photo-grid-item">
+                            <img src="photogallery1.JPG" alt="Photo 1" loading="lazy">
                         </div>
-                        <button class="scroll-arrow" id="scrollDown">↓</button>
+                        <div class="photo-grid-item">
+                            <img src="photogallery2.JPG" alt="Photo 2" loading="lazy">
+                        </div>
+                        <div class="photo-grid-item">
+                            <img src="photogallery3.JPG" alt="Photo 3" loading="lazy">
+                        </div>
+                        <div class="photo-grid-item">
+                            <img src="photogallery4.JPG" alt="Photo 4" loading="lazy">
+                        </div>
+                        <div class="photo-grid-item">
+                            <img src="photogallery5.jpg" alt="Photo 5" loading="lazy">
+                        </div>
+                        <div class="photo-grid-item">
+                            <img src="photogallery6.jpg" alt="Photo 6" loading="lazy">
+                        </div>
+                        <div class="photo-grid-item">
+                            <img src="photogallery7.jpg" alt="Photo 7" loading="lazy">
+                        </div>
+                        <div class="photo-grid-item">
+                            <img src="photogallery8.JPG" alt="Photo 8" loading="lazy">
+                        </div>
+                        <div class="photo-grid-item">
+                            <img src="photogallery9.JPG" alt="Photo 9" loading="lazy">
+                        </div>
                     </div>
                 </div>
-                <button class="collect-button">COLLECT</button>
             </div>
 
             <div class="content-section" id="clickmeSection">
@@ -858,12 +994,40 @@
                     </div>
                     <p class="giftbox-hint">Click the gift to open!</p>
                     <div class="giftbox-video-container" id="giftboxVideoContainer">
+                        <div class="video-close-btn" id="videoCloseBtn">
+                            <i class="fa-solid fa-xmark"></i>
+                        </div>
                         <video class="giftbox-video" id="giftboxVideo" controls playsinline>
                             <source src="tiktok.mp4" type="video/mp4">
                             <source src="tiktok.MOV" type="video/quicktime">
                             Your browser does not support the video tag.
                         </video>
                     </div>
+                </div>
+            </div>
+
+            <div class="content-section" id="momentSection">
+                <div class="countdown-container">
+                    <h2 class="countdown-title">Countdown to Our Moment</h2>
+                    <div class="countdown-timer" id="countdownTimer">
+                        <div class="time-box">
+                            <div class="time-value" id="days">00</div>
+                            <div class="time-label">Days</div>
+                        </div>
+                        <div class="time-box">
+                            <div class="time-value" id="hours">00</div>
+                            <div class="time-label">Hours</div>
+                        </div>
+                        <div class="time-box">
+                            <div class="time-value" id="minutes">00</div>
+                            <div class="time-label">Minutes</div>
+                        </div>
+                        <div class="time-box">
+                            <div class="time-value" id="seconds">00</div>
+                            <div class="time-label">Seconds</div>
+                        </div>
+                    </div>
+                    <p class="moment-message" id="countdownMessage">The moment is finally here! ✨</p>
                 </div>
             </div>
 
@@ -890,7 +1054,7 @@
                 if (enteredPasscode.length < 4) {
                     enteredPasscode += number;
                     updatePasscodeDisplay();
-                    
+
                     if (enteredPasscode.length === 4) {
                         if (enteredPasscode === CORRECT_PASSCODE) {
                             setTimeout(() => {
@@ -928,12 +1092,12 @@
                 passcodeScreen.style.display = 'none';
                 birthdayScreen.classList.add('active');
                 birthdayScreen.style.animation = 'fadeIn 0.6s ease-in';
-                
+
                 // Auto-play video when birthday screen appears
                 const heroVideo = document.getElementById('heroVideo');
                 const videoPlaceholder = document.getElementById('videoPlaceholder');
                 const videoOverlayText = document.querySelector('.video-overlay-text');
-                
+
                 if (heroVideo) {
                     setTimeout(() => {
                         heroVideo.play().catch(error => {
@@ -941,15 +1105,15 @@
                         });
                     }, 100);
                 }
-                
+
                 if (videoPlaceholder) {
                     videoPlaceholder.classList.add('hidden');
                 }
-                
+
                 if (videoOverlayText) {
                     videoOverlayText.style.opacity = '0.7';
                 }
-                
+
                 // Auto-play background music when birthday screen appears
                 if (backgroundMusic) {
                     backgroundMusic.volume = 0.5;
@@ -969,10 +1133,10 @@
         tabButtons.forEach(button => {
             button.addEventListener('click', () => {
                 const targetTab = button.getAttribute('data-tab');
-                
+
                 tabButtons.forEach(btn => btn.classList.remove('active'));
                 contentSections.forEach(section => section.classList.remove('active'));
-                
+
                 button.classList.add('active');
                 document.getElementById(targetTab + 'Section').classList.add('active');
             });
@@ -1017,56 +1181,7 @@
             });
         }
 
-        // Photo strip scrolling
-        const photoStrip = document.getElementById('photoStrip');
-        const scrollUp = document.getElementById('scrollUp');
-        const scrollDown = document.getElementById('scrollDown');
 
-        if (scrollUp && scrollDown && photoStrip) {
-            scrollUp.addEventListener('click', () => {
-                photoStrip.scrollBy({
-                    top: -220,
-                    behavior: 'smooth'
-                });
-            });
-
-            scrollDown.addEventListener('click', () => {
-                photoStrip.scrollBy({
-                    top: 220,
-                    behavior: 'smooth'
-                });
-            });
-        }
-
-        // Collect button interaction
-        const collectButton = document.querySelector('.collect-button');
-        if (collectButton) {
-            collectButton.addEventListener('click', () => {
-                collectButton.style.transform = 'scale(0.95)';
-                setTimeout(() => {
-                    collectButton.style.transform = 'scale(1)';
-                }, 150);
-
-                const photos = [
-                    'photogallery1.JPG',
-                    'photogallery2.JPG',
-                    'photogallery3.JPG',
-                    'photogallery.JPG'
-                ];
-
-                photos.forEach((photo, index) => {
-                    setTimeout(() => {
-                        const link = document.createElement('a');
-                        link.href = photo;
-                        link.download = photo;
-                        link.style.display = 'none';
-                        document.body.appendChild(link);
-                        link.click();
-                        document.body.removeChild(link);
-                    }, index * 200);
-                });
-            });
-        }
 
         // Giftbox animation and video reveal with audio control
         const giftbox = document.getElementById('giftbox');
@@ -1080,22 +1195,22 @@
 
             giftbox.addEventListener('click', () => {
                 if (isOpened) return;
-                
+
                 isOpened = true;
-                
+
                 // Add opened class to giftbox
                 giftbox.classList.add('opened');
-                
+
                 // Hide hint text
                 if (giftboxHint) {
                     giftboxHint.style.opacity = '0';
                 }
-                
+
                 // After giftbox shrinks, reveal video
                 setTimeout(() => {
                     giftboxContainer.classList.add('video-revealed');
                     giftboxVideoContainer.classList.add('revealed');
-                    
+
                     // Auto-play video when revealed
                     setTimeout(() => {
                         giftboxVideo.load();
@@ -1125,11 +1240,101 @@
             });
 
             giftboxVideo.addEventListener('ended', () => {
-                if (backgroundMusic) {
+                if (backgroundMusic && !isMusicPausedByUser) {
                     backgroundMusic.volume = 0.5; // Resume background music
                 }
             });
+
+            // Close button functionality
+            const videoCloseBtn = document.getElementById('videoCloseBtn');
+            if (videoCloseBtn) {
+                videoCloseBtn.addEventListener('click', () => {
+                    // Pause video
+                    giftboxVideo.pause();
+
+                    // Hide container
+                    giftboxContainer.classList.remove('video-revealed');
+                    giftboxVideoContainer.classList.remove('revealed');
+
+                    // Reset giftbox
+                    setTimeout(() => {
+                        giftbox.classList.remove('opened');
+                        if (giftboxHint) {
+                            giftboxHint.style.opacity = '0.8';
+                        }
+                        isOpened = false;
+                    }, 500);
+                });
+            }
         }
+
+        // Music Control Logic
+        const musicControl = document.getElementById('musicControl');
+        let isMusicPausedByUser = true; // Initially paused (browsers block autoplay)
+
+        if (musicControl && backgroundMusic) {
+            musicControl.addEventListener('click', () => {
+                if (backgroundMusic.paused) {
+                    backgroundMusic.volume = 0.5;
+                    backgroundMusic.play().then(() => {
+                        isMusicPausedByUser = false;
+                        musicControl.classList.add('playing');
+                        musicControl.innerHTML = '<i class="fa-solid fa-volume-high"></i>';
+                    }).catch(e => console.log(e));
+                } else {
+                    backgroundMusic.pause();
+                    isMusicPausedByUser = true;
+                    musicControl.classList.remove('playing');
+                    musicControl.innerHTML = '<i class="fa-solid fa-volume-xmark"></i>';
+                }
+            });
+
+            // Update icon on auto-play
+            backgroundMusic.addEventListener('play', () => {
+                isMusicPausedByUser = false;
+                musicControl.classList.add('playing');
+                musicControl.innerHTML = '<i class="fa-solid fa-volume-high"></i>';
+            });
+
+            backgroundMusic.addEventListener('pause', () => {
+                // Only update URI if paused by interaction, not by logical volume changes (though volume change doesn't trigger pause)
+                musicControl.classList.remove('playing');
+                musicControl.innerHTML = '<i class="fa-solid fa-volume-xmark"></i>';
+            });
+        }
+
+        // Countdown Logic
+        function updateCountdown() {
+            const targetDate = new Date('2026-03-01T00:00:00').getTime();
+            const now = new Date().getTime();
+            const diff = targetDate - now;
+
+            if (diff < 0) {
+                document.getElementById('days').innerText = '00';
+                document.getElementById('hours').innerText = '00';
+                document.getElementById('minutes').innerText = '00';
+                document.getElementById('seconds').innerText = '00';
+                const message = document.getElementById('countdownMessage');
+                if (message) message.style.display = 'block';
+                return;
+            }
+
+            const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+
+            document.getElementById('days').innerText = days.toString().padStart(2, '0');
+            document.getElementById('hours').innerText = hours.toString().padStart(2, '0');
+            document.getElementById('minutes').innerText = minutes.toString().padStart(2, '0');
+            document.getElementById('seconds').innerText = seconds.toString().padStart(2, '0');
+        }
+
+        // Update every second
+        setInterval(updateCountdown, 1000);
+        updateCountdown(); // Initial call
+
     </script>
 </body>
+
 </html>
