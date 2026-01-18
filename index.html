@@ -4,19 +4,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Happy Birthday!</title>
+    <title>Unlock</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
         href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;600;700&family=Inter:wght@300;400;500;600&display=swap"
         rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+        }
+
+        :root {
+            --heart-cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 32 32'%3E%3Cpath fill='%23d48a9e' d='M16 28s-9-6.2-12.2-11C1.2 13.2 2 8.6 5.4 6.4 8.1 4.6 11.6 5.2 14 7.7c.8.9 1.5 1.9 2 3 .5-1.1 1.2-2.1 2-3 2.4-2.5 5.9-3.1 8.6-1.3 3.4 2.2 4.2 6.8 1.6 10.6C25 21.8 16 28 16 28z'/%3E%3C/svg%3E") 16 16;
         }
 
         body {
@@ -30,9 +32,9 @@
             color: #5a4a4a;
             position: relative;
             overflow-x: hidden;
+            cursor: var(--heart-cursor), auto;
         }
 
-        /* Background GIFs */
         .background-gif {
             position: fixed;
             z-index: 0;
@@ -82,15 +84,9 @@
             }
         }
 
-        /* Ensure content is above background GIFs */
-        .passcode-screen,
-        .birthday-screen {
+        .passcode-screen {
             position: relative;
             z-index: 1;
-        }
-
-        /* Screen 1: Passcode Screen */
-        .passcode-screen {
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -110,6 +106,11 @@
             flex-direction: column;
             align-items: center;
             gap: 30px;
+        }
+
+        .passcode-card.unlocking {
+            animation: unlockPop 0.6s ease-out forwards;
+            box-shadow: 0 0 40px rgba(255, 182, 193, 0.6);
         }
 
         .profile-photo-container {
@@ -157,7 +158,7 @@
             font-size: 24px;
             font-weight: 500;
             color: #d48a9e;
-            cursor: pointer;
+            cursor: var(--heart-cursor), pointer;
             transition: all 0.3s ease;
             box-shadow: 0 2px 8px rgba(255, 182, 193, 0.15);
         }
@@ -193,444 +194,18 @@
             border-color: #d48a9e;
         }
 
-        /* Screen 2: Birthday Page */
-        .birthday-screen {
-            display: none;
-            width: 100%;
-            max-width: 900px;
-            animation: fadeIn 0.6s ease-in;
-        }
-
-        .birthday-screen.active {
-            display: block;
-        }
-
-        .birthday-container {
-            background: #fff;
-            border-radius: 24px;
-            padding: 40px;
-            box-shadow: 0 8px 32px rgba(255, 182, 193, 0.2);
-            width: 100%;
-        }
-
-        .birthday-header {
-            text-align: center;
-            font-family: 'Dancing Script', cursive;
-            font-size: 48px;
-            font-weight: 700;
-            color: #d48a9e;
-            margin-bottom: 30px;
-            letter-spacing: 2px;
-        }
-
-        .hero-section {
-            position: relative;
-            border-radius: 20px;
-            overflow: hidden;
-            margin-bottom: 30px;
-            box-shadow: 0 4px 20px rgba(255, 182, 193, 0.2);
-        }
-
-        .video-container {
-            position: relative;
-            width: 100%;
-            padding-top: 56.25%;
-            /* 16:9 aspect ratio */
-            background: linear-gradient(135deg, #ffeef5 0%, #ffb6c1 100%);
-        }
-
-        .video-element {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            border-radius: 20px;
-        }
-
-        .video-placeholder {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            color: #fff;
-            z-index: 3;
-            pointer-events: none;
-        }
-
-        .video-placeholder.hidden {
-            display: none;
-        }
-
-        .video-placeholder .play-button {
-            pointer-events: auto;
-        }
-
-        .play-button {
-            width: 80px;
-            height: 80px;
-            border-radius: 50%;
-            background: rgba(255, 255, 255, 0.9);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            margin-bottom: 20px;
-            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
-        }
-
-        .play-button:hover {
-            transform: scale(1.1);
-            background: rgba(255, 255, 255, 1);
-        }
-
-        .play-button::after {
-            content: '';
-            width: 0;
-            height: 0;
-            border-left: 24px solid #d48a9e;
-            border-top: 14px solid transparent;
-            border-bottom: 14px solid transparent;
-            margin-left: 4px;
-        }
-
-        .video-overlay-text {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            text-align: center;
-            color: #fff;
-            z-index: 2;
-            pointer-events: none;
-            transition: opacity 0.3s ease;
-        }
-
-        .video-overlay-text h2 {
-            font-family: 'Dancing Script', cursive;
-            font-size: 56px;
-            font-weight: 700;
-            margin-bottom: 10px;
-            text-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
-        }
-
-        .video-overlay-text p {
-            font-size: 18px;
-            opacity: 0.95;
-            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-        }
-
-        /* Tabs Design */
-        .tab-buttons {
-            display: flex;
-            justify-content: center;
-            gap: 15px;
-            margin-bottom: 50px;
-            margin-top: 20px;
-            flex-wrap: wrap;
-        }
-
-        .tab-button {
-            padding: 12px 28px;
-            border: 2px solid transparent;
-            background: #fff;
-            border-radius: 50px;
-            font-size: 16px;
-            font-weight: 600;
-            color: #d48a9e;
-            cursor: pointer;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            box-shadow: 0 4px 15px rgba(255, 182, 193, 0.2);
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .tab-button:before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(135deg, #ffb6c1 0%, #ffc4d0 100%);
-            opacity: 0;
-            transition: opacity 0.3s ease;
-            z-index: 0;
-        }
-
-        .tab-button span {
-            position: relative;
-            z-index: 1;
-        }
-
-        .tab-button i {
-            position: relative;
-            z-index: 1;
-            font-size: 18px;
-        }
-
-        .tab-button:hover {
-            transform: translateY(-3px) scale(1.02);
-            box-shadow: 0 8px 20px rgba(255, 182, 193, 0.4);
-            color: #d48a9e;
-        }
-
-        .tab-button.active {
-            color: #fff;
-            border-color: transparent;
-            box-shadow: 0 8px 25px rgba(255, 182, 193, 0.6);
-            transform: translateY(-2px);
-        }
-
-        .tab-button.active:before {
-            opacity: 1;
-        }
-
-        .content-section {
-            display: none;
-            animation: fadeIn 0.4s ease-in;
-            margin-top: 20px;
-        }
-
-        .content-section.active {
-            display: block;
-        }
-
-        .photo-card {
-            background: #ffeef5;
-            border-radius: 16px;
-            padding: 24px;
-            margin-bottom: 20px;
-            box-shadow: 0 2px 12px rgba(255, 182, 193, 0.15);
-        }
-
-        .photo-card-content {
-            display: flex;
-            gap: 24px;
-            align-items: flex-start;
-            flex-wrap: wrap;
-        }
-
-        .photo-card-image {
-            flex: 0 0 200px;
-            max-width: 100%;
-            border-radius: 12px;
-            overflow: hidden;
-            box-shadow: 0 2px 8px rgba(255, 182, 193, 0.2);
-        }
-
-        .photo-card-image img {
-            width: 100%;
-            height: auto;
-            display: block;
-        }
-
-        .profile-image-circle {
-            flex: 0 0 120px;
-            width: 120px;
-            height: 120px;
-            border-radius: 50%;
-            overflow: hidden;
-            box-shadow: 0 2px 8px rgba(255, 182, 193, 0.2);
-        }
-
-        .profile-image-circle img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-
-        .photo-card-text {
-            flex: 1;
-            min-width: 250px;
-        }
-
-        .photo-card-text h3 {
-            font-family: 'Dancing Script', cursive;
-            font-size: 32px;
-            color: #d48a9e;
-            margin-bottom: 12px;
-        }
-
-        .photo-card-text p {
-            font-size: 16px;
-            line-height: 1.6;
-            color: #5a4a4a;
-        }
-
-        /* Photo Gallery - 3x3 Grid */
-        .photo-gallery-container {
-            width: 100%;
-            padding: 20px 0;
-        }
-
-        .photo-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 15px;
-            width: 100%;
-        }
-
-        .photo-grid-item {
-            position: relative;
-            width: 100%;
-            padding-bottom: 100%;
-            /* 1:1 Aspect Ratio */
-            border-radius: 12px;
-            overflow: hidden;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-            cursor: pointer;
-        }
-
-        .photo-grid-item:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 8px 24px rgba(212, 138, 158, 0.3);
-            z-index: 2;
-        }
-
-        .photo-grid-item img {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            transition: transform 0.5s ease;
-        }
-
-        .photo-grid-item:hover img {
-            transform: scale(1.1);
-        }
-
-        /* Responsive Grid */
-        @media (max-width: 600px) {
-            .photo-grid {
-                grid-template-columns: repeat(2, 1fr);
-                gap: 10px;
+        @keyframes unlockPop {
+            0% {
+                transform: scale(1);
             }
-        }
 
+            60% {
+                transform: scale(1.06);
+            }
 
-        /* Giftbox Animation */
-        .giftbox-container {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            min-height: 400px;
-            padding: 40px;
-            position: relative;
-            overflow: visible;
-        }
-
-        .giftbox {
-            font-size: 120px;
-            cursor: pointer;
-            position: relative;
-            transition: transform 0.3s ease;
-            animation: bounce 2s ease-in-out infinite;
-            z-index: 2;
-        }
-
-        .giftbox:hover {
-            transform: scale(1.1);
-        }
-
-        .giftbox.opened {
-            animation: none;
-            transform: scale(0);
-            opacity: 0;
-            transition: transform 0.8s ease, opacity 0.8s ease;
-        }
-
-        @keyframes bounce {
-
-            0%,
             100% {
-                transform: translateY(0) scale(1);
+                transform: scale(0.98);
             }
-
-            50% {
-                transform: translateY(-20px) scale(1.05);
-            }
-        }
-
-        .giftbox-hint {
-            margin-top: 20px;
-            font-size: 18px;
-            color: #d48a9e;
-            font-weight: 500;
-            opacity: 0.8;
-            transition: opacity 0.3s ease;
-        }
-
-        .giftbox-container.video-revealed .giftbox-hint {
-            opacity: 0;
-        }
-
-        .giftbox-video-container {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%) scale(0);
-            width: 90%;
-            max-width: 800px;
-            max-height: 80vh;
-            opacity: 0;
-            transition: transform 0.8s ease, opacity 0.8s ease;
-            z-index: 10;
-            pointer-events: none;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .giftbox-video-container.revealed {
-            transform: translate(-50%, -50%) scale(1);
-            opacity: 1;
-            pointer-events: auto;
-        }
-
-        .giftbox-video {
-            width: 100%;
-            max-height: 80vh;
-            height: auto;
-            border-radius: 16px;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
-            background: #000;
-            display: block;
-            object-fit: contain;
-        }
-
-        .footer {
-            text-align: center;
-            margin-top: 50px;
-            padding-top: 30px;
-            border-top: 1px solid rgba(255, 182, 193, 0.3);
-        }
-
-        .footer-text {
-            font-size: 14px;
-            color: #d48a9e;
-            margin-bottom: 8px;
-        }
-
-        .footer-signature {
-            font-family: 'Dancing Script', cursive;
-            font-size: 24px;
-            color: #d48a9e;
-            font-weight: 600;
         }
 
         @keyframes fadeIn {
@@ -645,349 +220,24 @@
             }
         }
 
-        @keyframes slideIn {
-            from {
-                opacity: 0;
-                transform: translateX(-20px);
-            }
-
-            to {
-                opacity: 1;
-                transform: translateX(0);
-            }
-        }
-
-        /* Moment Section - Countdown */
-        .countdown-container {
-            text-align: center;
-            padding: 30px;
-            background: #fff;
-            border-radius: 20px;
-            box-shadow: 0 4px 16px rgba(255, 182, 193, 0.2);
-            margin-top: 20px;
-            animation: fadeIn 0.8s ease;
-        }
-
-        .countdown-title {
-            font-family: 'Dancing Script', cursive;
-            font-size: 42px;
-            color: #d48a9e;
-            margin-bottom: 30px;
-            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.05);
-        }
-
-        .countdown-timer {
-            display: flex;
-            justify-content: center;
-            gap: 20px;
-            flex-wrap: wrap;
-            margin-bottom: 20px;
-        }
-
-        .time-box {
-            background: linear-gradient(135deg, #ffeef5 0%, #fff 100%);
-            padding: 20px;
-            border-radius: 16px;
-            min-width: 100px;
-            box-shadow: 0 4px 12px rgba(255, 182, 193, 0.2);
-            border: 1px solid #ffeef5;
-            transition: transform 0.3s ease;
-        }
-
-        .time-box:hover {
-            transform: translateY(-5px);
-        }
-
-        .time-value {
-            font-size: 48px;
-            font-weight: 700;
-            color: #d48a9e;
-            font-family: 'Inter', sans-serif;
-            line-height: 1;
-            margin-bottom: 5px;
-        }
-
-        .time-label {
-            font-size: 14px;
-            color: #8a7a7a;
-            font-weight: 500;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        .moment-message {
-            font-size: 20px;
-            color: #d48a9e;
-            margin-top: 20px;
-            font-family: 'Dancing Script', cursive;
-            display: none;
-        }
-
-        /* Responsive Design */
         @media (max-width: 768px) {
             .passcode-card {
                 padding: 30px 20px;
             }
-
-            .birthday-container {
-                padding: 30px 20px;
-            }
-
-            .birthday-header {
-                font-size: 36px;
-            }
-
-            .video-overlay-text h2 {
-                font-size: 40px;
-            }
-
-            .photo-card-content {
-                flex-direction: column;
-            }
-
-            .photo-card-image {
-                flex: 1;
-                width: 100%;
-            }
-
-            .giftbox-video-container {
-                width: 95%;
-                max-height: 70vh;
-            }
-
-            .giftbox-video {
-                max-height: 70vh;
-            }
-        }
-
-        @media (max-width: 480px) {
-            body {
-                padding: 10px;
-            }
-
-            .birthday-header {
-                font-size: 32px;
-                margin-bottom: 20px;
-            }
-
-            .video-overlay-text h2 {
-                font-size: 32px;
-            }
-
-            .video-overlay-text p {
-                font-size: 14px;
-            }
-
-            .tab-buttons {
-                gap: 10px;
-                margin-bottom: 30px;
-            }
-
-            .tab-button {
-                padding: 8px 16px;
-                font-size: 14px;
-                width: calc(50% - 10px);
-                /* 2 buttons per row */
-                justify-content: center;
-            }
-
-            .photo-card {
-                padding: 16px;
-            }
-
-            .photo-card-content {
-                gap: 16px;
-            }
-
-            .countdown-title {
-                font-size: 28px;
-            }
-
-            .countdown-timer {
-                gap: 10px;
-            }
-
-            .time-box {
-                min-width: 70px;
-                padding: 10px;
-            }
-
-            .time-value {
-                font-size: 28px;
-            }
-
-            .time-label {
-                font-size: 10px;
-            }
-
-            /* Adjust close button for mobile so it is not cut off */
-            .video-close-btn {
-                top: -15px;
-                right: -10px;
-                width: 36px;
-                height: 36px;
-            }
-        }
-
-        /* Music Control Button */
-        .music-control {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            width: 50px;
-            height: 50px;
-            background: #fff;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            box-shadow: 0 4px 12px rgba(255, 182, 193, 0.4);
-            cursor: pointer;
-            z-index: 1000;
-            border: 2px solid #ffb6c1;
-            transition: all 0.3s ease;
-        }
-
-        .music-control:hover {
-            transform: scale(1.1);
-            background: #ffeef5;
-        }
-
-        .music-control i {
-            color: #d48a9e;
-            font-size: 20px;
-        }
-
-        .music-control.playing {
-            animation: pulse-border 2s infinite;
-        }
-
-        @keyframes pulse-border {
-            0% {
-                box-shadow: 0 0 0 0 rgba(255, 182, 193, 0.7);
-            }
-
-            70% {
-                box-shadow: 0 0 0 10px rgba(255, 182, 193, 0);
-            }
-
-            100% {
-                box-shadow: 0 0 0 0 rgba(255, 182, 193, 0);
-            }
-        }
-
-        /* Video Close Button */
-        .video-close-btn {
-            position: absolute;
-            top: -20px;
-            right: -20px;
-            width: 40px;
-            height: 40px;
-            background: #fff;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-            z-index: 20;
-            border: 2px solid #ffb6c1;
-            transition: all 0.3s ease;
-        }
-
-        .video-close-btn:hover {
-            transform: scale(1.1);
-            background: #ffeef5;
-        }
-
-        .video-close-btn i {
-            color: #d48a9e;
-            font-size: 20px;
-        }
-
-        /* Lightbox Overlay */
-        .lightbox {
-            display: none;
-            position: fixed;
-            z-index: 2000;
-            padding-top: 50px;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            overflow: auto;
-            background-color: rgba(0, 0, 0, 0.9);
-            animation: fadeIn 0.3s ease;
-        }
-
-        .lightbox-content {
-            margin: auto;
-            display: block;
-            max-width: 90%;
-            max-height: 90vh;
-            border-radius: 8px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
-            animation: zoomIn 0.3s ease;
-        }
-
-        .lightbox-close {
-            position: absolute;
-            top: 20px;
-            right: 35px;
-            color: #f1f1f1;
-            font-size: 40px;
-            font-weight: bold;
-            transition: 0.3s;
-            cursor: pointer;
-            z-index: 2001;
-        }
-
-        .lightbox-close:hover,
-        .lightbox-close:focus {
-            color: #bbb;
-            text-decoration: none;
-            cursor: pointer;
-        }
-
-        @keyframes zoomIn {
-            from {
-                transform: scale(0)
-            }
-
-            to {
-                transform: scale(1)
-            }
-        }
-
-        /* Typewriter Effect CSS */
-        .typewriter-text {
-            border-right: 2px solid #d48a9e;
-            white-space: normal;
-            display: inline;
-            line-height: 1.8;
-            font-size: 18px;
-            color: #5a4a4a;
-        }
-
-
-        .typewriter-cursor-hidden {
-            border-right: none;
         }
     </style>
 </head>
 
 <body>
-    <!-- Background GIFs -->
     <img src="gif1.gif" alt="" class="background-gif background-gif-1">
     <img src="gif2.gif" alt="" class="background-gif background-gif-2">
     <img src="gif3.gif" alt="" class="background-gif background-gif-3">
     <img src="gif4.gif" alt="" class="background-gif background-gif-4">
 
-    <!-- Screen 1: Passcode Screen -->
     <div class="passcode-screen" id="passcodeScreen">
-        <div class="passcode-card">
+        <div class="passcode-card" id="passcodeCard">
             <div class="profile-photo-container">
-                <img src="photobooth.jpg" alt="Profile" class="profile-photo" id="profilePhoto">
+                <img src="photobooth.jpg" alt="Profile" class="profile-photo">
             </div>
             <div class="keypad-container">
                 <div class="keypad-title">Enter Passcode</div>
@@ -1013,186 +263,12 @@
         </div>
     </div>
 
-    <!-- Background Music -->
-    <audio id="backgroundMusic" loop preload="auto">
-        <source src="22.mp3" type="audio/mpeg">
-        <source src="22.ogg" type="audio/ogg">
-        Your browser does not support the audio element.
-    </audio>
-
-    <div class="music-control" id="musicControl">
-        <i class="fa-solid fa-music"></i>
-    </div>
-
-    <!-- Screen 2: Birthday Page -->
-    <div class="birthday-screen" id="birthdayScreen">
-        <div class="birthday-container">
-            <h1 class="birthday-header">happy birthday! pretty girl Anny</h1>
-
-            <div class="hero-section">
-                <div class="video-container">
-                    <video class="video-element" id="heroVideo" preload="metadata" loop muted>
-                        <source src="IMG_5533.MOV" type="video/mp4">
-                        Your browser does not support the video tag.
-                    </video>
-                    <div class="video-overlay-text">
-                        <h2>hi, 22!</h2>
-                        <p>Wishing you endless joy, love, and happiness on your 22nd birthday ✨</p>
-                    </div>
-                    <div class="video-placeholder" id="videoPlaceholder">
-                        <div class="play-button" id="playButton"></div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="tab-buttons">
-                <button class="tab-button active" data-tab="letter">
-                    <i class="fa-solid fa-envelope-open-text"></i> <span>Letter</span>
-                </button>
-                <button class="tab-button" data-tab="photogallery">
-                    <i class="fa-solid fa-camera-retro"></i> <span>Photo Gallery</span>
-                </button>
-                <button class="tab-button" data-tab="moment">
-                    <i class="fa-solid fa-hourglass-half"></i> <span>Moment</span>
-                </button>
-                <button class="tab-button" data-tab="clickme">
-                    <i class="fa-solid fa-gift"></i> <span>Click Me!</span>
-                </button>
-            </div>
-
-            <div class="content-section active" id="letterSection">
-                <div class="photo-card">
-                    <div class="photo-card-content">
-                        <div class="photo-card-image profile-image-circle">
-                            <img src="profile.jpg" alt="Profile Photo">
-                        </div>
-                        <div class="photo-card-text">
-                            <h3>a little about u</h3>
-                            <div id="typewriterContainer">
-                                <p class="typewriter-text"></p>
-                            </div>
-                            <div id="hiddenLetterText" style="display: none;">
-                                喔我的 queen 👑<br>
-                                妳一出現,世界的光都自動對焦在妳身上。<br>
-                                不是因為妳完美,是因為妳就是妳。<br>
-                                謝謝妳每天不費力地讓我更愛這個世界一點點。<br>
-                                <br>
-                                喔我的 queen。<br>
-                                有些人漂亮是外表,<br>
-                                但妳是那種一開口、一個眼神,就會讓人靜下來的存在。<br>
-                                能被妳選中,我真的每天都在偷笑。<br>
-                                <br>
-                                喔喔我的 queen。<br>
-                                我的女朋友根本是神的私藏作品。<br>
-                                溫柔的時候我想躲進去,堅強的時候我想站在妳旁邊。<br>
-                                我的 queen,不管走到哪,我都甘願當妳最忠誠的隨從。
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="content-section" id="photogallerySection">
-                <div class="photo-gallery-container">
-                    <div class="photo-grid">
-                        <div class="photo-grid-item">
-                            <img src="photogallery1.JPG" alt="Photo 1" loading="lazy">
-                        </div>
-                        <div class="photo-grid-item">
-                            <img src="photogallery2.JPG" alt="Photo 2" loading="lazy">
-                        </div>
-                        <div class="photo-grid-item">
-                            <img src="photogallery3.JPG" alt="Photo 3" loading="lazy">
-                        </div>
-                        <div class="photo-grid-item">
-                            <img src="photogallery4.JPG" alt="Photo 4" loading="lazy">
-                        </div>
-                        <div class="photo-grid-item">
-                            <img src="photogallery5.jpg" alt="Photo 5" loading="lazy">
-                        </div>
-                        <div class="photo-grid-item">
-                            <img src="photogallery6.jpg" alt="Photo 6" loading="lazy">
-                        </div>
-                        <div class="photo-grid-item">
-                            <img src="photogallery7.jpg" alt="Photo 7" loading="lazy">
-                        </div>
-                        <div class="photo-grid-item">
-                            <img src="photogallery8.JPG" alt="Photo 8" loading="lazy">
-                        </div>
-                        <div class="photo-grid-item">
-                            <img src="photogallery9.JPG" alt="Photo 9" loading="lazy">
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="content-section" id="clickmeSection">
-                <div class="giftbox-container">
-                    <div class="giftbox" id="giftbox">
-                        <div class="giftbox-body">🎁</div>
-                        <div class="giftbox-ribbon"></div>
-                    </div>
-                    <p class="giftbox-hint">Click the gift to open!</p>
-                    <div class="giftbox-video-container" id="giftboxVideoContainer">
-                        <div class="video-close-btn" id="videoCloseBtn">
-                            <i class="fa-solid fa-xmark"></i>
-                        </div>
-                        <video class="giftbox-video" id="giftboxVideo" controls playsinline>
-                            <source src="tiktok.mp4" type="video/mp4">
-                            <source src="tiktok.MOV" type="video/quicktime">
-                            Your browser does not support the video tag.
-                        </video>
-                    </div>
-                </div>
-            </div>
-
-            <div class="content-section" id="momentSection">
-                <div class="countdown-container">
-                    <h2 class="countdown-title">Countdown to Our Moment</h2>
-                    <div class="countdown-timer" id="countdownTimer">
-                        <div class="time-box">
-                            <div class="time-value" id="days">00</div>
-                            <div class="time-label">Days</div>
-                        </div>
-                        <div class="time-box">
-                            <div class="time-value" id="hours">00</div>
-                            <div class="time-label">Hours</div>
-                        </div>
-                        <div class="time-box">
-                            <div class="time-value" id="minutes">00</div>
-                            <div class="time-label">Minutes</div>
-                        </div>
-                        <div class="time-box">
-                            <div class="time-value" id="seconds">00</div>
-                            <div class="time-label">Seconds</div>
-                        </div>
-                    </div>
-                    <p class="moment-message" id="countdownMessage">The moment is finally here! ✨</p>
-                </div>
-            </div>
-
-            <div class="footer">
-                <div class="footer-text">(made with love)</div>
-                <div class="footer-signature">harryhou</div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Lightbox Modal -->
-    <div id="lightboxModal" class="lightbox">
-        <span class="lightbox-close">&times;</span>
-        <img class="lightbox-content" id="lightboxImage">
-    </div>
-
     <script>
-        // Passcode logic
         const CORRECT_PASSCODE = '0122';
         let enteredPasscode = '';
         const passcodeDisplay = document.getElementById('passcodeDisplay');
-        const passcodeScreen = document.getElementById('passcodeScreen');
-        const birthdayScreen = document.getElementById('birthdayScreen');
+        const passcodeCard = document.getElementById('passcodeCard');
         const keypadButtons = document.querySelectorAll('.keypad-button');
-        const backgroundMusic = document.getElementById('backgroundMusic');
 
         keypadButtons.forEach(button => {
             button.addEventListener('click', () => {
@@ -1204,12 +280,12 @@
                     if (enteredPasscode.length === 4) {
                         if (enteredPasscode === CORRECT_PASSCODE) {
                             setTimeout(() => {
-                                transitionToBirthday();
-                            }, 300);
+                                transitionToMain();
+                            }, 200);
                         } else {
                             setTimeout(() => {
                                 resetPasscode();
-                            }, 800);
+                            }, 700);
                         }
                     }
                 }
@@ -1232,370 +308,14 @@
             updatePasscodeDisplay();
         }
 
-        function transitionToBirthday() {
-            passcodeScreen.style.animation = 'fadeIn 0.5s ease-out reverse';
+        function transitionToMain() {
+            if (passcodeCard) {
+                passcodeCard.classList.add('unlocking');
+            }
             setTimeout(() => {
-                passcodeScreen.style.display = 'none';
-                birthdayScreen.classList.add('active');
-                birthdayScreen.style.animation = 'fadeIn 0.6s ease-in';
-
-                // Auto-play video when birthday screen appears
-                const heroVideo = document.getElementById('heroVideo');
-                const videoPlaceholder = document.getElementById('videoPlaceholder');
-                const videoOverlayText = document.querySelector('.video-overlay-text');
-
-                if (heroVideo) {
-                    setTimeout(() => {
-                        heroVideo.play().catch(error => {
-                            console.log('Autoplay prevented:', error);
-                        });
-                    }, 100);
-                }
-
-                if (videoPlaceholder) {
-                    videoPlaceholder.classList.add('hidden');
-                }
-
-                if (videoOverlayText) {
-                    videoOverlayText.style.opacity = '0.7';
-                }
-
-                // Trigger Confetti
-                triggerConfetti();
-
-                // Start Typewriter
-                startTypewriter();
-
-                // Auto-play background music when birthday screen appears
-                if (backgroundMusic) {
-                    backgroundMusic.volume = 0.5;
-                    setTimeout(() => {
-                        backgroundMusic.play().catch(error => {
-                            console.log('Music autoplay prevented:', error);
-                        });
-                    }, 200);
-                }
+                window.location.href = 'main.html';
             }, 500);
         }
-
-        // Tab switching logic
-        const tabButtons = document.querySelectorAll('.tab-button');
-        const contentSections = document.querySelectorAll('.content-section');
-
-        tabButtons.forEach(button => {
-            button.addEventListener('click', () => {
-                const targetTab = button.getAttribute('data-tab');
-
-                tabButtons.forEach(btn => btn.classList.remove('active'));
-                contentSections.forEach(section => section.classList.remove('active'));
-
-                button.classList.add('active');
-                document.getElementById(targetTab + 'Section').classList.add('active');
-            });
-        });
-
-        // Video play button interaction
-        const playButton = document.getElementById('playButton');
-        const heroVideo = document.getElementById('heroVideo');
-        const videoPlaceholder = document.getElementById('videoPlaceholder');
-        const videoOverlayText = document.querySelector('.video-overlay-text');
-
-        if (playButton && heroVideo && videoPlaceholder) {
-            playButton.addEventListener('click', (e) => {
-                e.stopPropagation();
-                if (heroVideo.paused) {
-                    heroVideo.play();
-                    videoPlaceholder.classList.add('hidden');
-                    videoOverlayText.style.opacity = '0.7';
-                } else {
-                    heroVideo.pause();
-                    videoPlaceholder.classList.remove('hidden');
-                    videoOverlayText.style.opacity = '1';
-                }
-            });
-
-            heroVideo.addEventListener('play', () => {
-                videoPlaceholder.classList.add('hidden');
-                videoOverlayText.style.opacity = '0.7';
-            });
-
-            heroVideo.addEventListener('pause', () => {
-                videoPlaceholder.classList.remove('hidden');
-                videoOverlayText.style.opacity = '1';
-            });
-
-            heroVideo.addEventListener('click', () => {
-                if (heroVideo.paused) {
-                    heroVideo.play();
-                } else {
-                    heroVideo.pause();
-                }
-            });
-        }
-
-
-
-        // Giftbox animation and video reveal with audio control
-        const giftbox = document.getElementById('giftbox');
-        const giftboxContainer = document.querySelector('.giftbox-container');
-        const giftboxVideoContainer = document.getElementById('giftboxVideoContainer');
-        const giftboxVideo = document.getElementById('giftboxVideo');
-        const giftboxHint = document.querySelector('.giftbox-hint');
-
-        if (giftbox && giftboxContainer && giftboxVideoContainer && giftboxVideo) {
-            let isOpened = false;
-
-            giftbox.addEventListener('click', () => {
-                if (isOpened) return;
-
-                isOpened = true;
-
-                // Add opened class to giftbox
-                giftbox.classList.add('opened');
-
-                // Hide hint text
-                if (giftboxHint) {
-                    giftboxHint.style.opacity = '0';
-                }
-
-                // After giftbox shrinks, reveal video
-                setTimeout(() => {
-                    giftboxContainer.classList.add('video-revealed');
-                    giftboxVideoContainer.classList.add('revealed');
-
-                    // Auto-play video when revealed
-                    setTimeout(() => {
-                        giftboxVideo.load();
-                        giftboxVideo.play().then(() => {
-                            // Mute background music when giftbox video plays
-                            if (backgroundMusic) {
-                                backgroundMusic.volume = 0;
-                            }
-                        }).catch(error => {
-                            console.log('Video autoplay prevented:', error);
-                        });
-                    }, 300);
-                }, 400);
-            });
-
-            // Control background music based on giftbox video state
-            giftboxVideo.addEventListener('play', () => {
-                if (backgroundMusic) {
-                    backgroundMusic.volume = 0; // Mute background music
-                }
-            });
-
-            giftboxVideo.addEventListener('pause', () => {
-                if (backgroundMusic) {
-                    backgroundMusic.volume = 0.5; // Resume background music
-                }
-            });
-
-            giftboxVideo.addEventListener('ended', () => {
-                if (backgroundMusic && !isMusicPausedByUser) {
-                    backgroundMusic.volume = 0.5; // Resume background music
-                }
-            });
-
-            // Close button functionality
-            const videoCloseBtn = document.getElementById('videoCloseBtn');
-            if (videoCloseBtn) {
-                videoCloseBtn.addEventListener('click', () => {
-                    // Pause video
-                    giftboxVideo.pause();
-
-                    // Hide container
-                    giftboxContainer.classList.remove('video-revealed');
-                    giftboxVideoContainer.classList.remove('revealed');
-
-                    // Reset giftbox
-                    setTimeout(() => {
-                        giftbox.classList.remove('opened');
-                        if (giftboxHint) {
-                            giftboxHint.style.opacity = '0.8';
-                        }
-                        isOpened = false;
-                    }, 500);
-                });
-            }
-        }
-
-        // Music Control Logic
-        const musicControl = document.getElementById('musicControl');
-        let isMusicPausedByUser = true; // Initially paused (browsers block autoplay)
-
-        if (musicControl && backgroundMusic) {
-            musicControl.addEventListener('click', () => {
-                if (backgroundMusic.paused) {
-                    backgroundMusic.volume = 0.5;
-                    backgroundMusic.play().then(() => {
-                        isMusicPausedByUser = false;
-                        musicControl.classList.add('playing');
-                        musicControl.innerHTML = '<i class="fa-solid fa-volume-high"></i>';
-                    }).catch(e => console.log(e));
-                } else {
-                    backgroundMusic.pause();
-                    isMusicPausedByUser = true;
-                    musicControl.classList.remove('playing');
-                    musicControl.innerHTML = '<i class="fa-solid fa-volume-xmark"></i>';
-                }
-            });
-
-            // Update icon on auto-play
-            backgroundMusic.addEventListener('play', () => {
-                isMusicPausedByUser = false;
-                musicControl.classList.add('playing');
-                musicControl.innerHTML = '<i class="fa-solid fa-volume-high"></i>';
-            });
-
-            backgroundMusic.addEventListener('pause', () => {
-                // Only update URI if paused by interaction, not by logical volume changes (though volume change doesn't trigger pause)
-                musicControl.classList.remove('playing');
-                musicControl.innerHTML = '<i class="fa-solid fa-volume-xmark"></i>';
-            });
-        }
-
-        // Countdown Logic
-        function updateCountdown() {
-            const targetDate = new Date('2026-03-01T00:00:00').getTime();
-            const now = new Date().getTime();
-            const diff = targetDate - now;
-
-            if (diff < 0) {
-                document.getElementById('days').innerText = '00';
-                document.getElementById('hours').innerText = '00';
-                document.getElementById('minutes').innerText = '00';
-                document.getElementById('seconds').innerText = '00';
-                const message = document.getElementById('countdownMessage');
-                if (message) message.style.display = 'block';
-                return;
-            }
-
-            const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-            const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-            const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-            const seconds = Math.floor((diff % (1000 * 60)) / 1000);
-
-            document.getElementById('days').innerText = days.toString().padStart(2, '0');
-            document.getElementById('hours').innerText = hours.toString().padStart(2, '0');
-            document.getElementById('minutes').innerText = minutes.toString().padStart(2, '0');
-            document.getElementById('seconds').innerText = seconds.toString().padStart(2, '0');
-        }
-
-        // Update every second
-        setInterval(updateCountdown, 1000);
-        updateCountdown(); // Initial call
-
-
-        // --- New Features Logic ---
-
-        // 1. Confetti Function
-        function triggerConfetti() {
-            var duration = 3 * 1000;
-            var animationEnd = Date.now() + duration;
-            var defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 0 };
-
-            function randomInOut(min, max) {
-                return Math.random() * (max - min) + min;
-            }
-
-            var interval = setInterval(function () {
-                var timeLeft = animationEnd - Date.now();
-
-                if (timeLeft <= 0) {
-                    return clearInterval(interval);
-                }
-
-                var particleCount = 50 * (timeLeft / duration);
-
-                // Since particles fall down, start a bit higher than random
-                confetti(Object.assign({}, defaults, { particleCount, origin: { x: randomInOut(0.1, 0.3), y: Math.random() - 0.2 } }));
-                confetti(Object.assign({}, defaults, { particleCount, origin: { x: randomInOut(0.7, 0.9), y: Math.random() - 0.2 } }));
-            }, 250);
-        }
-
-        // 2. Lightbox Logic
-        const lightboxModal = document.getElementById('lightboxModal');
-        const lightboxImage = document.getElementById('lightboxImage');
-        const lightboxClose = document.querySelector('.lightbox-close');
-        const photoGridItems = document.querySelectorAll('.photo-grid-item img');
-
-        if (lightboxModal && lightboxImage) {
-            photoGridItems.forEach(img => {
-                img.addEventListener('click', (e) => {
-                    lightboxModal.style.display = "block";
-                    lightboxImage.src = e.target.src;
-                });
-            });
-
-            if (lightboxClose) {
-                lightboxClose.addEventListener('click', () => {
-                    lightboxModal.style.display = "none";
-                });
-            }
-
-            lightboxModal.addEventListener('click', (e) => {
-                if (e.target === lightboxModal) {
-                    lightboxModal.style.display = "none";
-                }
-            });
-        }
-
-        // 3. Typewriter Logic
-        function startTypewriter() {
-            const container = document.querySelector('.typewriter-text');
-            const hiddenText = document.getElementById('hiddenLetterText');
-
-            if (!container || !hiddenText) return;
-
-            // Get text content while preserving line breaks
-            // We replace <br> with newlines for the text logic, then re-render
-            let text = hiddenText.innerHTML.replace(/<br\s*\/?>/gi, '\n');
-            // Clean up extra whitespace from HTML formatting if necessary, but keep structure
-            // Simplified approach: usage of simple text content if possible, but we have HTML line breaks.
-            // Better approach: manual parsing or just using the string content directly.
-
-            // Let's use the raw HTML content string but strip the outer whitespace
-            // AND remove source code formatting (newlines and indentation)
-            text = hiddenText.innerHTML.trim().replace(/\s*[\r\n]+\s*/g, '');
-
-            container.innerHTML = ''; // Clear initial
-            let i = 0;
-            let speed = 50; // typing speed in ms
-
-            // Handle HTML tags correctly (don't type them char by char)
-            // Valid simple HTML typewriter
-
-            let html = text;
-            let currentText = "";
-            let tagOpen = false;
-
-            function type() {
-                if (i < html.length) {
-                    let char = html.charAt(i);
-
-                    if (char === '<') tagOpen = true;
-                    if (char === '>') tagOpen = false;
-
-                    currentText += char;
-                    container.innerHTML = currentText;
-
-                    i++;
-
-                    if (tagOpen) {
-                        type(); // Skip delay for tags
-                    } else {
-                        setTimeout(type, speed);
-                    }
-                } else {
-                    // Remove cursor after finished
-                    container.classList.add('typewriter-cursor-hidden');
-                }
-            }
-
-            setTimeout(type, 1000); // Start after small delay
-        }
-
     </script>
 </body>
 
